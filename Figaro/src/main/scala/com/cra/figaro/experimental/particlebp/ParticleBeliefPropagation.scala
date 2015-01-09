@@ -148,6 +148,7 @@ trait ParticleBeliefPropagation extends FactoredAlgorithm[Double] with InnerBPHa
 
     // Remove factors on all elements that can possibly change during resamples
     dependentElems.foreach(Factory.removeFactors(_))
+    //currentUniverse.activeElements.foreach(Factory.removeFactors(_))
 
     // Clear the variable and values caches
     Variable.clearCache
@@ -177,7 +178,7 @@ trait ParticleBeliefPropagation extends FactoredAlgorithm[Double] with InnerBPHa
       val oldBeliefs = bp.getBeliefsForElement(elem)
       val bw = proposalEstimator(oldBeliefs)
       val newSamples = pbpSampler.resample(elem, oldBeliefs, bw)
-      universe.usedBy(elem)
+      universe.usedBy(elem) + elem
     }
     (needsToBeResampled, dependentElems)
   }

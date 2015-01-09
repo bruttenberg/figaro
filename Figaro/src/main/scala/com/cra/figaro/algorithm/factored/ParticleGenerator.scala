@@ -20,6 +20,7 @@ import com.cra.figaro.util._
 import com.cra.figaro.language.Universe
 import com.cra.figaro.language.Atomic
 import com.cra.figaro.library.atomic.discrete.OneShifter
+import com.cra.figaro.util.MapResampler
 
 /**
  * Class to handle sampling from continuous elements in PBP
@@ -30,7 +31,7 @@ import com.cra.figaro.library.atomic.discrete.OneShifter
 class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTotalSamples: Int) {
 
   // Caches the samples for an element
-  private val sampleMap = Map[Element[_], List[(Double, _)]]()
+  private val sampleMap = Map[Element[_], (List[(Double, _)], Int)]()
 
   /**
    * Returns the set of sampled elements contained in this sampler
@@ -45,7 +46,7 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
   /**
    * Updates the samples for an element
    */
-  def update(elem: Element[_], samples: List[(Double, _)]) = sampleMap.update(elem, samples)
+  def update(elem: Element[_], numSamples: Int, samples: List[(Double, _)]) = sampleMap.update(elem, (samples, numSamples))
 
   /**
    * Retrieves the samples for an element using the default number of samples.
@@ -58,13 +59,13 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
   def apply[T](elem: Element[T], numSamples: Int): List[(Double, T)] = {
     sampleMap.get(elem) match {
       case Some(e) => {
-        e.asInstanceOf[List[(Double, T)]]
+        e.asInstanceOf[(List[(Double, T)], Int)]._1
       }
       case None => {
         val sampler = ElementSampler(elem, numSamples)
         sampler.start
         val result = sampler.computeDistribution(elem).toList
-        sampleMap += elem -> result
+        sampleMap += elem -> (result, numSamples)
         elem.universe.register(sampleMap)
         sampler.kill
         result
@@ -82,10 +83,18 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
     def nextDouble(d: Double) = random.nextGaussian() * proposalVariance + d
 
     val sampleDensity: Double = 1.0 / beliefs.size
+    
+    val numSamples = sampleMap(elem)._2
 
     val newSamples = elem match {
       case o: OneShifter => {
-        beliefs.map(b => {
+        val toResample = if (beliefs.size < numSamples) {
+          val resampler = new MapResampler(beliefs.map(s => (s._1, s._2)))
+          List.fill(numSamples)(1.0/numSamples, resampler.resample)
+        } else {
+          beliefs
+        }
+        toResample.map(b => {
           val oldValue = b._2.asInstanceOf[Int]
           val newValue = nextInt(oldValue)
           val nextValue = if (o.density(newValue) > 0.0) {
@@ -108,7 +117,7 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
         beliefs
       }
     }
-    update(elem, newSamples)
+    update(elem, numSamples, newSamples)
   }
 
   private def accept[T](oldValue: T, newValue: T, beliefs: List[(Double, T)]): T = {
