@@ -4,6 +4,7 @@ Figaro Programming Language & Core Libraries
 
 Reasoning under uncertainty requires taking what you know and inferring what you don’t know, when what you know doesn’t tell you for sure what you don’t know. A well-established approach for reasoning under uncertainty is probabilistic reasoning. Typically, you create a probabilistic model over all the variables you’re interested in, observe the values of some variables, and query others. There is a huge variety of probabilistic models, and new ones are being developed constantly. Figaro is designed to help build and reason with the wide range of probabilistic models.
 Developing a new probabilistic model normally requires developing a representation for the model and a reasoning algorithm that can draw useful conclusions from evidence, and in many cases also an algorithm to learn aspects of the model from data. These can be challenging tasks, making probabilistic reasoning require significant effort and expertise. Furthermore, most probabilistic reasoning tools are standalone and difficult to integrate into larger programs. 
+
 Figaro is a probabilistic programming language that helps address both these issues. Figaro makes it possible to express probabilistic models using the power of programming languages, giving the modeler the expressive tools to create all sorts of models. Figaro comes with a number of built-in reasoning algorithms that can be applied automatically to new models. In addition, Figaro models are data structures in the Scala programming language, which is interoperable with Java, and can be constructed, manipulated, and used directly within any Scala or Java program.
 Figaro is extremely expressive. It can represent a wide variety of models, including:
 
@@ -22,7 +23,6 @@ Figaro’s library of reasoning algorithms is also extensible. Current built-in al
 
 * Exact inference using variable elimination
 * Belief propagation
-* Particle belief propagation (experimental)
 * Lazy factored inference for infinite models
 * Importance sampling
 * Metropolis-Hastings, with an expressive language to define proposal distributions
@@ -148,7 +148,7 @@ Optionally, you can add the fully qualified path name of the Figaro jar to your 
 
 If the CLASSPATH does not exist yet, create it. It is good practice to include the current working directory, so set the CLASSPATH to “.”, then proceed to add the Figaro jar, as in the next step. 
 
-By this point, the CLASSPATH already exists, so we can add the Figaro path to it. For example, on Windows 7, if figaro_2.11-3.0.0.0.jar is in the “C:\Users\apfeffer” folder and the CLASSPATH is currently equal to “.”, change the CLASSPATH to “C:\Users\apfeffer\figaro_2.11-3.0.0.0.jar;.” (replace 3.0.0.0 with the appropriate Figaro version number). 
+By this point, the CLASSPATH already exists, so we can add the Figaro path to it. For example, on Windows 7, if figaro_2.11-3.0.0.0-fat.jar is in the “C:\Users\apfeffer” folder and the CLASSPATH is currently equal to “.”, change the CLASSPATH to “C:\Users\apfeffer\figaro_2.11-3.0.0.0-fat.jar;.” (replace 3.0.0.0 with the appropriate Figaro version number). 
 
 Now you can compile and run Figaro programs just like any Scala program. Put the Test program below in a file named Test.scala. First, let’s assume you followed step 4 and updated the CLASSPATH.
 
@@ -156,9 +156,9 @@ If you run scala Test.scala from the directory containing Test.scala, the Scala 
 
 If you run scalac Test.scala (note the c at the end of “scalac”), the Scala compiler runs and produces .class files. You can then execute the program by running scala Test from the same directory.
 
-If you did not follow step 4, you can set the CLASSPATH from the command line using the –cp option. For example, to compile and execute Test.scala, assuming figaro_2.11-3.0.0.0.jar is in the “C:\Users\apfeffer” folder, you can run
+If you did not follow step 4, you can set the CLASSPATH from the command line using the –cp option. For example, to compile and execute Test.scala, assuming figaro_2.11-3.0.0.0-fat.jar is in the “C:\Users\apfeffer” folder, you can run
 ```
-scala –cp C:\Users\apfeffer\figaro_2.11-3.0.0.0.jar Test.scala
+scala –cp C:\Users\apfeffer\figaro_2.11-3.0.0.0-fat.jar Test.scala
 ```
 
 Here’s the Test program:

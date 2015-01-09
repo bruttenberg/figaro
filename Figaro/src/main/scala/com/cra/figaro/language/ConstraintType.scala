@@ -27,7 +27,7 @@ private[figaro] abstract class ConstraintType[T] extends Function1[T, Double] {
 }
 
 /*
- * Case class for user defined constraints that are already in logarithimc form
+ * Case class for user defined constraints that are already in logarithmic form
  */
 private[figaro] case class LogConstraintType[T](fcn: T => Double) extends ConstraintType[T] {
   def apply(d: T) = fcn(d)

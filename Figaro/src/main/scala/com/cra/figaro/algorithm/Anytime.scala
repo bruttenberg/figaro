@@ -56,7 +56,7 @@ trait Anytime extends Algorithm {
   def runStep(): Unit
 
   /**
-   * Optional function to run when the algorithm is stopped (not killed). Used in samplers to update lazy values
+   * Optional function to run when the algorithm is stopped (not killed). Used in samplers to update lazy values.
    */
   def stopUpdate(): Unit = {  }
 
@@ -146,6 +146,9 @@ trait Anytime extends Algorithm {
     shutdown
   }
 
+  /**
+   * Release all resources from this anytime algorithm.
+   */
   def shutdown {
     cleanUp()
     if (running)

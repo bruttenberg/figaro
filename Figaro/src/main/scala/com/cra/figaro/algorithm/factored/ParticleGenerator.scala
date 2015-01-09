@@ -23,7 +23,7 @@ import com.cra.figaro.library.atomic.discrete.OneShifter
 import com.cra.figaro.util.MapResampler
 
 /**
- * Class to handle sampling from continuous elements in PBP
+ * Class to handle sampling from continuous elements in PBP.
  * @param argSamples Maximum number of samples to take from atomic elements
  * @param totalSamples Maximum number of samples on the output of chains
  * @param de An instance to compute the density estimate of point during resampling
@@ -34,17 +34,17 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
   private val sampleMap = Map[Element[_], (List[(Double, _)], Int)]()
 
   /**
-   * Returns the set of sampled elements contained in this sampler
+   * Returns the set of sampled elements contained in this sampler.
    */
   def sampledElements(): Set[Element[_]] = sampleMap.keySet.toSet
 
   /**
-   * Clears all of the samples for elements in this sampler
+   * Clears all of the samples for elements in this sampler.
    */
   def clear() = sampleMap.clear
 
   /**
-   * Updates the samples for an element
+   * Updates the samples for an element.
    */
   def update(elem: Element[_], numSamples: Int, samples: List[(Double, _)]) = sampleMap.update(elem, (samples, numSamples))
 
@@ -54,7 +54,7 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
   def apply[T](elem: Element[T]): List[(Double, T)] = apply(elem, numArgSamples)
 
   /**
-   * Retrieves the samples for an element using the indicated number of samples
+   * Retrieves the samples for an element using the indicated number of samples.
    */
   def apply[T](elem: Element[T], numSamples: Int): List[(Double, T)] = {
     sampleMap.get(elem) match {
@@ -74,7 +74,7 @@ class ParticleGenerator(de: DensityEstimator, val numArgSamples: Int, val numTot
   }
 
   /**
-   * Resample and update the element from the indicated beliefs
+   * Resample and update the element from the indicated beliefs.
    * beliefs = (Probability, Value)
    */
   def resample(elem: Element[_], beliefs: List[(Double, _)], proposalVariance: Double): Unit = {

@@ -20,12 +20,12 @@ import com.cra.figaro.algorithm.sampling.ProbEvidenceSampler
 import com.cra.figaro.algorithm.Anytime
 
 /**
- * Trait for creating and running Belief Propagation within another algorithm
+ * Trait for creating and running Belief Propagation within another algorithm.
  */
 trait InnerBPHandler {
 
   /**
-   * Universe associated with this algorithm
+   * Universe associated with this algorithm.
    */
   protected var currentUniverse: Universe = _
 
